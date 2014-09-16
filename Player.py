@@ -29,21 +29,29 @@ def main():
     player_vel = player.getLinearVelocity(True)
 
     # controls
-    if keyboard.events[bge.events.COMMAKEY] == k:
-        if player_vel[1] < PLAYER_MAX_SPEED:
-            player.applyForce([0,80,0], True)
-    if keyboard.events[bge.events.OKEY] == k:
-        if player_vel[1] > -PLAYER_MAX_SPEED:
-            player.applyForce([0,-80,0], True)
-    if keyboard.events[bge.events.AKEY] == k:
-        if player_vel[0] > -PLAYER_MAX_SPEED:
-            player.applyForce([-80,0,0], True)
-    if keyboard.events[bge.events.EKEY] == k:
-        if player_vel[0] < PLAYER_MAX_SPEED:
-            player.applyForce([80,0,0], True)
-    if keyboard.events[bge.events.SPACEKEY] == k:
-        if player_vel[0] < PLAYER_MAX_SPEED:
-            if ground_sensor.hitObject != None:
+    
+    # crouching
+    if k == keyboard.events[bge.events.LEFTCTRLKEY]:
+        player.localScale.z = 0.9
+    else:
+        player.localScale.z = 1.8
+        
+    # if touching ground
+    if ground_sensor.hitObject != None:
+        if keyboard.events[bge.events.COMMAKEY] == k:
+            if player_vel[1] < PLAYER_MAX_SPEED:
+                player.applyForce([0,80,0], True)
+        if keyboard.events[bge.events.OKEY] == k:
+            if player_vel[1] > -PLAYER_MAX_SPEED:
+                player.applyForce([0,-80,0], True)
+        if keyboard.events[bge.events.AKEY] == k:
+            if player_vel[0] > -PLAYER_MAX_SPEED:
+                player.applyForce([-80,0,0], True)
+        if keyboard.events[bge.events.EKEY] == k:
+            if player_vel[0] < PLAYER_MAX_SPEED:
+                player.applyForce([80,0,0], True)
+        if keyboard.events[bge.events.SPACEKEY] == k:
+            if player_vel[0] < PLAYER_MAX_SPEED:
                 player.applyForce([0,0,160], True)
 
             
