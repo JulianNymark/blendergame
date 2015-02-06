@@ -1,11 +1,14 @@
 import bge
 import Rasterizer
+import math
 
 PLAYER_MAX_SPEED = 10
 PLAYER_ACCEL = 80
 
+MOUSE_SENS = 1.5
+
 def main():
-    print("Player script start :p")
+    print("------------ Player script start :p")
 
     cont = bge.logic.getCurrentController()
     scene = bge.logic.getCurrentScene()
@@ -14,7 +17,6 @@ def main():
     keyboard = bge.logic.keyboard
     mouse = bge.logic.mouse
     cam = scene.objects.get("Camera") 
-    k = bge.logic.KX_INPUT_ACTIVE
     
     ground_sensor = cont.sensors["touch_ground"]
     #print(bge.types.KX_TouchSensor(ground_sensor).hitObject)
@@ -22,13 +24,31 @@ def main():
 
     # mouse look
     # apply rotation and reset mouse position
-    cam.applyRotation([mouse.position[1]* -1, 0, 0], True)
-    player.applyRotation([0, 0, mouse.position[0]* -1], True)
-    Rasterizer.setMousePosition(0,0)
+    mouseX = mouse.position[0] * -1
+    mouseY = mouse.position[1] * -1
+    w = bge.render.getWindowWidth()
+    h = bge.render.getWindowHeight()
+    w2 = math.ceil(w/2)
+    h2 = math.ceil(h/2)
+
+    moveX = mouseX + 0.5
+    moveY = mouseY + 0.5
+
+    moveY *= MOUSE_SENS
+    moveX *= MOUSE_SENS
+    
+    print("mouse.position[0]: ", mouseX)
+    print("w2: ", w2)
+    print("moveX: ",moveX, " moveY: ", moveY)
+
+    cam.applyRotation([moveY, 0, 0], True)
+    player.applyRotation([0, 0, moveX], True)
+    Rasterizer.setMousePosition(w2, h2)
     
     player_vel = player.getLinearVelocity(True)
 
     # controls
+    k = bge.logic.KX_INPUT_ACTIVE
     
     # crouching
     if k == keyboard.events[bge.events.LEFTCTRLKEY]:
